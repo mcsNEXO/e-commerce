@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId 
+  name String?
+  wishList WishList?
+  firstName String?
+  lastName String?
+  email String?
+  emailVerified DateTime?
+  image String?
+  hashedPassword String?
+  addresses Addresses[]
+  cart Cart?
+  role Role? @default(USER)
+  accounts Account[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String   @db.ObjectId
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.String
+  access_token       String?  @db.String
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.String
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Addresses {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  addressId String? @db.ObjectId
+  user User? @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  street String?   
+  city String?     
+  zipCode String? 
+  country String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  categoryId String @db.ObjectId
+  category Category @relation(fields: [categoryId], references: [id])
+  wishListIds String[] @db.ObjectId
+  wishList WishList[] @relation(fields: [wishListIds],references: [id])
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String?
+  colors Json?
+  variants Json?
+  type String?
+  title String?
+  slug String?
+  price Float?
+  discount Float?
+  quantity Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  publishedAt DateTime?
+  description String?
+  rating Int? @default(0)
+}
+
+model Category {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  createdAt DateTime @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+}
+
+model Cart {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  updatedAt DateTime @updatedAt
+  createAt DateTime @default(now())
+  userId String @unique @db.ObjectId 
+  user User @relation(fields: [userId],references: [id])
+}
+
+model WishList {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  updatedAt DateTime @updatedAt
+  createAt DateTime @default(now())
+  userId String @unique @db.ObjectId
+  user User @relation(fields: [userId],references: [id])
+  products Product[] @relation(fields: [productsIds], references: [id])
+  productsIds String[] @db.ObjectId
+}
+
+enum Role{
+  USER
+  ADMIN
+}
