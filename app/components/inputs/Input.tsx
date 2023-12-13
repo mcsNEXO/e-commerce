@@ -10,7 +10,7 @@ import React from "react";
 import clsx from "clsx";
 
 interface InputProps {
-  type: "email" | "password" | "text" | "tel";
+  type: "email" | "password" | "text" | "tel" | "number";
   name: string;
   label: string;
   errors: FieldErrors;
@@ -36,11 +36,12 @@ const Input: React.FC<InputProps> = ({
       </label>
       <div className="mt-2">
         <input
-          type={type}
-          autoComplete={name}
           id={name}
-          {...register(name, { ...options })}
+          type={type}
+          disabled={disabled}
+          autoComplete={name}
           aria-invalid={errors[name] ? "true" : "false"}
+          {...register(name, { ...options })}
           className={clsx(
             ` form-input block w-full border-0 py-1.5 rounded-md text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm sm:leading-6`,
             errors[name]
@@ -50,7 +51,7 @@ const Input: React.FC<InputProps> = ({
           )}
         />
         {errors[name] && (
-          <div className=" text-rose-500 text-sm  pl-1 font-medium">
+          <div className="text-rose-500 text-sm pl-1 font-medium">
             {errors[name]?.message as string}
           </div>
         )}
