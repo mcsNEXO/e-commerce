@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AuthContext from "./context/AuthProvider";
 import { Toaster } from "react-hot-toast";
+import { DarkenedBgProvider } from "./context/DarkenedBg";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} min-h-[100vh] bg-gray-100`}>
-        <AuthContext>
-          <Toaster />
-          {children}
-        </AuthContext>
+        <DarkenedBgProvider>
+          <AuthContext>
+            <Toaster />
+            {children}
+          </AuthContext>
+        </DarkenedBgProvider>
       </body>
     </html>
   );

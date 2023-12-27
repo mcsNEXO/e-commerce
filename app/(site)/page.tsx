@@ -1,21 +1,23 @@
 import React from "react";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import Image from "next/image";
 import { Button, Input } from "@nextui-org/react";
 import ClientButton from "../components/buttons/ClientButton";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import Slider from "./components/Slider";
 import Footer from "./components/Footer";
+import DarkenedBackground from "./components/DarkenedBackground";
 
 function Main() {
   return (
-    <div>
+    <div className="relative">
+      <DarkenedBackground />
       <Header />
       <main>
-        <div className="w-full h-[88vh] overflow-hidden relative">
+        <div className="w-full min-h-[88vh] h-auto overflow-hidden relative">
           <Image
             src="/assets/images/collection0.jpg"
-            className=""
+            className="object-cover md:object-fill"
             alt="collection"
             fill={true}
           />
@@ -54,6 +56,7 @@ function Main() {
                 alt="man"
                 className="h-auto group-hover:opacity-60 transition-opacity"
                 fill={true}
+                sizes=""
               />
               <ClientButton
                 type="button"
@@ -69,6 +72,7 @@ function Main() {
                 alt="man-woman"
                 className="h-auto hover:opacity-60 transition-opacity"
                 fill={true}
+                sizes=""
               />
               <div className="w-full flex px-4 flex-col justify-center h-full">
                 <div className="text-black text-xl font-bold w-full flex items-center gap-2">
@@ -91,6 +95,7 @@ function Main() {
                 alt="woman"
                 className="h-auto group-hover:opacity-60 transition-opacity"
                 fill={true}
+                sizes=""
               />
               <ClientButton
                 type="button"
