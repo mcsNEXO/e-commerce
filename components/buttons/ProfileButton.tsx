@@ -22,7 +22,7 @@ function ProfileButton() {
       radius="sm"
       className={clsx(
         "block",
-        status === "authenticated" ? "block" : "md:hidden"
+        status === "authenticated" ? "block" : "mbig:hidden"
       )}
       classNames={{
         base: "before:bg-default-200",
@@ -117,7 +117,7 @@ function ProfileButton() {
             <ClientButton
               size="sm"
               className="w-fit min-w-fit h-auto p-0 text-sm bg-transparent"
-              events={{ onClick: signOut }}
+              events={{ onClick: () => signOut() }}
             >
               <span className="text-rose-500 font-semibold group-hover:text-rose-600 group-hover:font-bold">
                 Log Out

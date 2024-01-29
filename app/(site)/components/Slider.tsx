@@ -1,5 +1,5 @@
 "use client";
-import ClientButton from "@/app/components/buttons/ClientButton";
+import ClientButton from "@/components/buttons/ClientButton";
 import React, { useRef } from "react";
 import { FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
 

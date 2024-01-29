@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@nextui-org/react";
-import React, { ReactNode } from "react";
+import React, { DOMAttributes, ReactNode } from "react";
 
 interface ClientButtonProps {
   type?: "button" | "submit" | "reset";
@@ -8,7 +8,7 @@ interface ClientButtonProps {
   onMouseEnter?: () => void;
   size: "lg" | "md" | "sm";
   children: ReactNode;
-  events?: any;
+  events?: DOMAttributes<Object>;
 }
 
 const ClientButton: React.FC<ClientButtonProps> = ({

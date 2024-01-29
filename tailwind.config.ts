@@ -18,6 +18,10 @@ module.exports = {
       },
     },
     extend: {
+      inset: {
+        header: "var(--header-height)",
+      },
+
       screens: {
         mbig: "800px",
         vsm: "330px",
@@ -60,6 +64,11 @@ module.exports = {
       },
       height: {
         collection: "var(--collectionWidth)",
+        header: "var(--header-height)",
+        filterBar: "var(--filter-height)",
+      },
+      spacing: {
+        filterBar: "var(--filter-height)",
       },
       borderRadius: {
         lg: "var(--radius)",

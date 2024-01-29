@@ -3,7 +3,6 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { getProviders, signIn, useSession } from "next-auth/react";
 import { Button, Spinner } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
-import Input from "@/app/components/inputs/Input";
 import ProviderButton from "./ProviderButton";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
@@ -11,6 +10,7 @@ import { FaGithub } from "react-icons/fa";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import axios from "axios";
+import Input from "@/components/inputs/Input";
 
 interface AuthFromProps {
   variant: "SIGNUP" | "SIGNIN";
@@ -75,7 +75,7 @@ const AuthForm: React.FC<AuthFromProps> = ({ variant, label }) => {
     }
   };
 
-  const providersAction: any = async (action: string) => {
+  const providersAction = async (action: string) => {
     setLoading(true);
     const providers = await getProviders();
     if (providers && Object.keys(providers).includes(action)) {

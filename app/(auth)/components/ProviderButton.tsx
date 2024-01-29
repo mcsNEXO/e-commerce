@@ -7,7 +7,7 @@ interface ProviderButtonProps {
   icon: IconType;
   providerName: string;
   disabled: boolean;
-  onClick: () => any;
+  onClick: () => void;
 }
 
 const ProviderButton: React.FC<ProviderButtonProps> = ({

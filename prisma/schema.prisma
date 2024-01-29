@@ -12,26 +12,28 @@ datasource db {
 
 
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String?
-  wishList WishList?
-  firstName String?
-  lastName String?
-  phone Int?
-  email String? @unique
-  emailVerified DateTime?
-  image String?
-  hashedPassword String?
-  addresses Addresses[]
-  cart Cart?
-  role Role? @default(USER)
-  accounts Account[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  name            String?
+  hashedPassword  String?
+  email           String? @unique
+  emailVerified   DateTime?
+  phone           Int?
+  firstName       String?
+  lastName        String?
+  image           String?
+  role            Role? @default(USER)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt 
+
+  addresses       Addresses[]
+  wishList        WishListItem[]
+  cartList        CartItem[]
+  accounts        Account[]
 }
 
 model Account {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id                 String @id @default(auto()) @map("_id") @db.ObjectId
   userId             String   @db.ObjectId
   type               String
   provider           String
@@ -44,69 +46,143 @@ model Account {
   id_token           String?  @db.String
   session_state      String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
 model Addresses {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  user      User? @relation(fields: [addressId], references: [id], onDelete: Cascade)
   addressId String? @db.ObjectId
-  user User? @relation(fields: [addressId], references: [id], onDelete: Cascade)
-  street String?   
-  city String?     
-  zipCode String? 
-  country String?
+  street    String?   
+  city      String?     
+  zipCode   String? 
+  country   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Product {
-  categoryId String @db.ObjectId
-  category Category @relation(fields: [categoryId], references: [id])
-  wishListIds String[] @db.ObjectId
-  wishList WishList[] @relation(fields: [wishListIds],references: [id])
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String?
-  colors Json?
-  variants Json?
-  type String?
-  title String?
-  slug String?
-  price Float?
-  discount Float?
-  quantity Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  publishedAt DateTime?
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String?
+  title       String?
+  slug        String?
+  price       Float?
+  discount    Float?
   description String?
-  rating Int? @default(0)
+  rating      Int? @default(0)
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  genderId    String? @db.ObjectId 
+  gender      Gender? @relation(fields: [genderId], references: [id])
+  
+  categoryId  String? @db.ObjectId 
+  category    Category? @relation(fields: [categoryId], references: [id])
+
+  typeId String? @db.ObjectId
+  type   Type?   @relation(fields: [typeId], references: [id])
+
+  variants    ProductVariant[]
+
+  wishListItems  WishListItem[] 
+  cartItems      CartItem[]
+}
+
+model Gender {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  value       String     @unique
+  label     String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  categories Category[] @relation(fields: [categorieIds],references: [id])
+  categorieIds String[] @db.ObjectId
+  products   Product[]
 }
 
 model Category {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  value     String   @unique
+  label     String
+  genderIds  String[]   @db.ObjectId
+  gender    Gender[]   @relation(fields: [genderIds], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+  types    Type[] @relation(fields: [typeIds],references: [id])
+  typeIds String[] @db.ObjectId
+}
+model Type { 
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  value       String   @unique
+  label       String
+  categoryIds  String[]   @db.ObjectId
+  category    Category[] @relation(fields: [categoryIds], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products Product[]
+}
+
+model Image {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  url       String?
+  color     Color?   @relation(fields: [colorId], references: [id])
+  colorId   String? @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Color {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String?
+  variants  ProductVariant[]
+  images    Image[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Size {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  name     String?
+  variants ProductVariant[]
+}
+
+model ProductVariant {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId     String?   @db.ObjectId
+  colorId       String?   @db.ObjectId
+  sizeId        String?   @db.ObjectId
+  stockQuantity Int?
+  product       Product? @relation(fields: [productId], references: [id])
+  color         Color?   @relation(fields: [colorId], references: [id])
+  size          Size?    @relation(fields: [sizeId], references: [id])
+}
+
+
+model WishListItem {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  product   Product @relation(fields: [productId],references: [id])
+  productId String @db.ObjectId
+  user      User @relation(fields: [userId], references: [id])
+  userId    String @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime  @updatedAt
-  products  Product[]
 }
 
-model Cart {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  updatedAt DateTime @updatedAt
-  createAt DateTime @default(now())
-  userId String @unique @db.ObjectId 
-  user User @relation(fields: [userId],references: [id])
-}
-
-model WishList {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  updatedAt DateTime @updatedAt
-  createAt DateTime @default(now())
-  userId String @unique @db.ObjectId
-  user User @relation(fields: [userId],references: [id])
-  products Product[] @relation(fields: [productsIds], references: [id])
-  productsIds String[] @db.ObjectId
+model CartItem {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  productId String @db.ObjectId
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String @db.ObjectId
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 enum Role{

@@ -4,6 +4,8 @@
 
 @layer base {
   :root {
+    --header-height: 4.625rem;
+    --filter-height: calc(100vh - var(--header-height));
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -68,6 +70,11 @@
 }
 
 @layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
   * {
     @apply border-border;
   }

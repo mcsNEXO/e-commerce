@@ -1,19 +1,19 @@
 "use client";
-import ClientButton from "@/app/components/buttons/ClientButton";
-import { drawer } from "@/app/data/Drawer/drawer";
 import clsx from "clsx";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { BiMenu } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
-import { EnumType, subDrawer } from "@/app/data/Drawer/subDrawer";
-import { EnumCategories } from "@/app/data/Drawer/drawer";
 import { FaArrowLeft } from "react-icons/fa6";
 import Link from "next/link";
+import { subDrawer } from "@/data/Drawer/subDrawer";
+import ClientButton from "@/components/buttons/ClientButton";
+import { drawer } from "@/data/Drawer/drawer";
+import { CategoryType, GenderType } from "@/types";
 
 function Drawer() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [gender, setGender] = useState<EnumCategories | "">("");
+  const [gender, setGender] = useState<GenderType | "">("");
   const [category, setCatergory] = useState<string | "">("");
   const [type, setType] = useState<string | "">("");
 
@@ -60,10 +60,10 @@ function Drawer() {
                       className="flex font-semibold bg-neutral-100 text-lg justify-center items-center h-14 border"
                       key={index}
                       events={{
-                        onClick: () => setGender(item.path),
+                        onClick: () => setGender(item.value),
                       }}
                     >
-                      {item.title}
+                      {item.label}
                     </ClientButton>
                   );
                 })}
@@ -91,17 +91,17 @@ function Drawer() {
             <div className="mt-2 flex flex-col gap-5">
               {gender !== "" &&
                 Object.keys(subDrawer[gender]).map((typeKey, index) => {
-                  const item = subDrawer[gender][typeKey as EnumType];
+                  const item = subDrawer[gender][typeKey as CategoryType];
                   return (
                     <ClientButton
                       size="md"
                       className="flex font-semibold bg-neutral-100 text-lg justify-center items-center h-14 border"
                       key={index}
                       events={{
-                        onClick: () => setCatergory(item?.pathname ?? ""),
+                        onClick: () => setCatergory(item?.value ?? ""),
                       }}
                     >
-                      {item?.title}
+                      {item?.label}
                     </ClientButton>
                   );
                 })}
@@ -128,17 +128,17 @@ function Drawer() {
             <div className="mt-2 flex flex-col gap-5">
               {category !== "" &&
                 gender !== "" &&
-                subDrawer[gender][category as EnumType]?.submenuOption.map(
+                subDrawer[gender][category as CategoryType]?.submenuOption.map(
                   (item, index) => {
                     return (
                       <ClientButton
                         size="md"
                         className="flex font-semibold bg-neutral-100 text-lg justify-center items-center h-14 border"
                         key={index}
-                        events={{ onClick: () => setType(item?.path ?? "") }}
+                        events={{ onClick: () => setType(item?.value ?? "") }}
                       >
-                        <Link href={`${gender}/${category}/${type}`}>
-                          {item?.title}
+                        <Link href={`/w/${gender}/${category}/${item.value}`}>
+                          {item?.label}
                         </Link>
                       </ClientButton>
                     );

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import AuthContext from "./context/AuthProvider";
 import { Toaster } from "react-hot-toast";
-import { DarkenedBgProvider } from "./context/DarkenedBg";
+import { DarkenedBgProvider } from "@/context/DarkenedBg";
+import AuthContext from "@/context/AuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 

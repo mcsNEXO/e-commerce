@@ -1,7 +1,7 @@
 "use client";
-import { useDarkenedBg } from "@/app/context/DarkenedBg";
+import { useDarkenedBg } from "@/context/DarkenedBg";
 import clsx from "clsx";
-import React, { useEffect } from "react";
+import React from "react";
 
 function DarkenedBackground() {
   const darkend = useDarkenedBg();
